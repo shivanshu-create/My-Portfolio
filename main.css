@@ -91,7 +91,8 @@
 
   transition: 
     transform 0.5s ease,
-    filter 0.5s ease;
+    filter 0.5s ease,
+    box-shodow 0.5s ease;
 }
 
 .hero-image img:hover, .hero-image img:focus-visible {
@@ -101,6 +102,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .hero-image img:hover, .hero-image img:focus-visible {
     transform: scale(1.08) translateY(-12px);
+    box-shadow: 5px 5px 10px rgba(13, 56, 56, 0.685);
   }
 }
 
@@ -218,3 +220,228 @@
         animation: hover-shine 0.8s ease 1;
     }
 }
+
+/* ---------------- Skills section --------------------- */
+
+.skill-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  
+
+  max-width: 1050px;
+  margin: 120px auto;
+  border-radius: 25px;
+  border: solid 2px black
+}
+
+.skill-heading {
+  font-size: 25px;
+  font-family: Liberation Mono, Bold;
+}
+
+.Skill {
+  margin: 30px;
+  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.Skill h4 {
+  flex-basis: 100%;
+  margin: 0 0 5px 0;
+  background: linear-gradient(117deg, #5d5eb0 3%, #6366f1 4%, #6366f1 35%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.skill-name {
+  display: inline-block;
+
+  background-color: #fff;
+  padding: 12px 16px;
+
+  border-radius: 12px;
+  border: solid 1px rgb(235, 224, 224);
+
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.skill-name:hover {
+  transform: scale(1.08);
+
+  box-shadow:
+    0 6px 20px rgba(18, 18, 18, 0.1);
+}
+
+/* -------------- Projects ---------------  */
+
+.project-plus-image {
+  display: flex;
+  margin: 120px 12px;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+ 
+.projects-section {
+  background-color: #dbd5d5;
+  border-radius: 20px;
+  padding: 12px 16px;
+
+  width: fit-content;
+  max-width: 650px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.projects-heading {
+  color: white;
+  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.project-full-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.container {
+  color: rgb(255, 255, 255);
+  position: relative;
+  font-family: sans-serif;
+}
+
+.container::before,
+.container::after {
+  content: "";
+  background-color: #f786164c;
+  position: absolute;
+}
+
+.container::before {
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  top: 30%;
+  right: 7%;
+}
+
+.container::after {
+  content: "";
+  position: absolute;
+  height: 3rem;
+  top: 8%;
+  right: 5%;
+  border: 1px solid;
+}
+
+.container .box {
+  max-width: 16.875em;
+  min-height: 8.275em;
+  padding: 1rem;
+  background-color: rgba(22, 22, 22, 0.155);
+  border: 1px solid rgba(152, 136, 136, 0.222);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 0.7rem;
+  transition: all ease 0.3s;
+}
+
+.container .box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  cursor: pointer;
+}
+
+.container .box .title {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.container .box div strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.container .box div p {
+  margin: 0;
+  font-size: 0.9em;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+}
+
+.container .box div span {
+  font-size: 0.7rem;
+  font-weight: 300;
+}
+
+.container .box div span:nth-child(3) {
+  font-weight: 500;
+  margin-right: 0.2rem;
+}
+
+.container .box:hover {
+  box-shadow: 0px 0px 20px 1px #f8b97b3f;
+  border: 1px solid rgba(248, 156, 156, 0.149);
+  transform: scale(1.02);
+}
+
+.project-image img {
+  width: 250px;
+  height: 250px;
+
+  object-fit: cover;
+  border-radius: 25px;
+  padding: auto;
+
+  transition: 
+    transform 0.35s ease,
+    filter 0.35s ease,
+    box-shodow 0.35s ease;
+}
+
+.project-image img:hover, .project-image img:focus-visible {
+  filter: brightness(1.02);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .project-image img:hover, .project-image img:focus-visible {
+    transform: scale(1.02) translateY(-4px);
+    box-shadow: 5px 5px 10px rgba(25, 28, 28, 0.6);
+  }
+}
+
+/* ----------- contact ----------------- */
+
+.contact-me-heading {
+  font-family: cursive;
+  margin-bottom: 25px;
+  font-size: 35px;
+
+  background: linear-gradient(117deg, #6366f1 3%, #6366f1 4%, #6366f1 35%, #06b6d4 95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.contact-me {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 120px auto;
+  padding: 20px;
+}
+
