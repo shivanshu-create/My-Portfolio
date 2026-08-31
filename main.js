@@ -1,28 +1,31 @@
 const projects = [
   {
     name: "Notelet",
-    description: "Linux Text editor with Restore Session, Pin and many more abilities"
+    description: "Linux Text editor with Restore Session, Pin and many more abilities",
+    link: "notelet.html"
   },
   {
     name: "ClipCycle",
-    description: "Middle click paste with copy on selection, stores every copied item"
+    description: "Middle click paste with copy on selection, stores every copied item",
+    link: "clipcycle.html"
   },
   {
     name: "Resilient Gateway",
-    description: "Distributed Rate Limiting & Circuit Breaking"
+    description: "Distributed Rate Limiting & Circuit Breaking",
+    link: "resilient-gateway.html"
   }
 ];
 
 function createProjectCard(project) {
   return `
-    <div class="container">
+    <a href="${project.link}" class="container" style="text-decoration: none; display: block; color: inherit;">
       <div class="box">
         <span class="title">${project.name}</span>
         <div>
           <p>${project.description}</p>
         </div>
       </div>
-    </div>
+    </a>
   `
 }
 
