@@ -77,3 +77,23 @@ const skillsContainer = document.getElementById("skills-container")
 skills.forEach(skill => {
   skillsContainer.innerHTML += createSkillsPart(skill)
 });
+
+// Navigation Smooth Scrolling
+const navButtons = document.querySelectorAll(".Top-Row-Button[data-target]");
+navButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    const targetId = button.getAttribute("data-target");
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+});
+
+const nameLogo = document.querySelector(".Top-Row-Name");
+if (nameLogo) {
+  nameLogo.style.cursor = "pointer";
+  nameLogo.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
