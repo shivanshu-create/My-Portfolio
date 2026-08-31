@@ -3,37 +3,236 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClipCycle</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
-    
-    body {
-      position: relative;
-    }
-    
-    canvas {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -10;
-    }
-  </style>
+  <title>ClipCycle — Case Study | Shivanshu Prasad Pandey</title>
+  <link rel="stylesheet" href="project-style.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 </head>
 <body>
+  <!-- WebGL Aurora Background -->
   <canvas id="aurora-canvas"></canvas>
 
+  <!-- Sticky Nav -->
+  <nav class="top-nav">
+    <a href="main.html#projects-section" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> Back to Projects
+    </a>
+    <div class="author-tag">Shivanshu Prasad Pandey</div>
+  </nav>
+
+  <div class="case-study-container">
+
+    <!-- Hero Section -->
+    <header class="project-hero">
+      <span class="project-tag">Browser Extension</span>
+
+      <h1 class="project-title">ClipCycle</h1>
+      <h2 class="project-subtitle">Clipboard History Manager</h2>
+
+      <p class="project-description">
+        A high-speed browser extension engineered for frictionless copying and pasting. Simply select text to copy it automatically, and paste with a single middle-click or <kbd style="background: rgba(255,255,255,0.12); padding: 2px 6px; border-radius: 4px; font-family: monospace;">Ctrl</kbd> + <kbd style="background: rgba(255,255,255,0.12); padding: 2px 6px; border-radius: 4px; font-family: monospace;">V</kbd>—eliminating repetitive shortcut friction and making clipboard management significantly faster than traditional tools.
+      </p>
+
+      <div class="tech-pill-list">
+        <span class="tech-pill"><i class="fa-solid fa-i-cursor"></i> Copy on Select</span>
+        <span class="tech-pill"><i class="fa-solid fa-computer-mouse"></i> Middle-Click Paste</span>
+        <span class="tech-pill"><i class="fa-brands fa-js"></i> JavaScript</span>
+        <span class="tech-pill"><i class="fa-solid fa-puzzle-piece"></i> WebExtensions API</span>
+        <span class="tech-pill"><i class="fa-brands fa-html5"></i> HTML5</span>
+        <span class="tech-pill"><i class="fa-brands fa-css3-alt"></i> CSS3</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="https://github.com/shivanshu-create/ClipCycle" target="_blank" class="btn-github">
+          <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Visual Showcase Area: Demo GIF -->
+    <section class="showcase-wrapper">
+      <img src="assets/clipcycle_demo.gif" alt="ClipCycle Browser Extension Demo GIF" class="showcase-media">
+    </section>
+
+    <!-- The Problem -->
+    <section class="case-study-section">
+      <div class="section-label">Background</div>
+      <h2 class="section-heading">The Problem</h2>
+      
+      <p class="section-paragraph">
+        Copying and pasting information repeatedly can become tedious when previously copied content is no longer available.
+      </p>
+      <p class="section-paragraph">
+        I wanted a lightweight way to keep track of recently copied text without requiring a separate, bulky desktop application.
+      </p>
+    </section>
+
+    <!-- What I Built -->
+    <section class="case-study-section">
+      <div class="section-label">Core Capabilities</div>
+      <h2 class="section-heading">What I Built</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+          <h3>Clipboard History</h3>
+          <p>Captures copied text and maintains a chronological history of recent clipboard entries seamlessly in the background.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-database"></i></div>
+          <h3>Persistent History</h3>
+          <p>Uses browser storage to reliably maintain clipboard history across popup sessions and browser restarts.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+          <h3>Quick Access</h3>
+          <p>Provides an intuitive popup interface where users can instantly view, search, and copy historical entries with one click.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture / How It Works -->
+    <section class="case-study-section">
+      <div class="section-label">System Flow</div>
+      <h2 class="section-heading">Architecture</h2>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Event & Storage Flow</span>
+        </div>
+        <pre class="diagram-content">
+            Browser
+               │
+               ▼
+        Clipboard Event
+               │
+               ▼
+        Extension Logic
+               │
+          ┌────┴────┐
+          ▼         ▼
+      Storage      Popup
+          │         │
+          └────┬────┘
+               ▼
+        Clipboard History</pre>
+      </div>
+    </section>
+
+    <!-- Engineering Decisions -->
+    <section class="case-study-section">
+      <div class="section-label">Technical Decisions</div>
+      <h2 class="section-heading">Engineering Decisions</h2>
+
+      <div class="challenges-stack">
+        <!-- Decision 1 -->
+        <div class="challenge-row">
+          <div class="challenge-column">
+            <span class="column-tag decision">Architecture · Manifest V3</span>
+            <h4>Modern Extension Standard</h4>
+            <p>ClipCycle is built using the modern WebExtensions architecture and Manifest V3 specifications.</p>
+          </div>
+          <div class="challenge-column">
+            <span class="column-tag solution">Rationale & Impact</span>
+            <h4>Structured Security & Lifecycle</h4>
+            <p>Provides the extension with a secure, structured permission model and native browser-managed event-driven components.</p>
+          </div>
+        </div>
+
+        <!-- Decision 2 -->
+        <div class="challenge-row">
+          <div class="challenge-column">
+            <span class="column-tag decision">Memory Control · History Limit</span>
+            <h4>Bounded Storage Ring</h4>
+            <p>The extension limits stored history strictly to the most recent 50 entries.</p>
+          </div>
+          <div class="challenge-column">
+            <span class="column-tag solution">Rationale & Impact</span>
+            <h4>Zero Memory Bloat</h4>
+            <p>Prevents extension storage from growing without bounds, keeping lookup operations instant and memory footprint minimal.</p>
+          </div>
+        </div>
+
+        <!-- Decision 3 -->
+        <div class="challenge-row">
+          <div class="challenge-column">
+            <span class="column-tag decision">Security · Permissions</span>
+            <h4>Least Privilege Access</h4>
+            <p>The extension requests only minimal permissions strictly required for clipboard reading and local persistent storage.</p>
+          </div>
+          <div class="challenge-column">
+            <span class="column-tag solution">Rationale & Impact</span>
+            <h4>User Privacy</h4>
+            <p>Guarantees zero unnecessary broad permissions or background network telemetry, keeping clipboard data fully local.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="case-study-section">
+      <div class="section-label">Impact</div>
+      <h2 class="section-heading">Results</h2>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">50</div>
+          <div class="metric-label">Max History Entries</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">V3</div>
+          <div class="metric-label">Manifest Architecture</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">Local</div>
+          <div class="metric-label">Browser Storage</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What I Learned -->
+    <section class="case-study-section">
+      <div class="section-label">Takeaways</div>
+      <h2 class="section-heading">What I Learned</h2>
+
+      <ul class="learnings-list">
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Browser extension architecture</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Manifest V3 standards & Service Workers</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> WebExtensions APIs & lifecycle events</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Clipboard APIs & asynchronous permissions</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Browser storage management</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Permission management & security models</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Building responsive extension popup interfaces</li>
+      </ul>
+    </section>
+
+    <!-- Future Improvements -->
+    <section class="case-study-section">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-heading">Future Improvements</h2>
+
+      <div class="future-grid">
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Search clipboard history</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Keyboard shortcuts</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Duplicate detection</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Entry pinning</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Configurable history size</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Richer clipboard formats</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Three.js + Aurora Background Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="aurora.js"></script>
 </body>

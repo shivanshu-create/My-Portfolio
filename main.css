@@ -398,13 +398,9 @@ html {
   backdrop-filter: blur(20px);
   border-radius: 0.7rem;
   transition: all ease 0.3s;
-}
-
-.container .box {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
   cursor: pointer;
 }
 

@@ -3,37 +3,446 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resilient Gateway</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
-    
-    body {
-      position: relative;
-    }
-    
-    canvas {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -10;
-    }
-  </style>
+  <title>Resilient Gateway — Systems Case Study | Shivanshu Prasad Pandey</title>
+  <link rel="stylesheet" href="project-style.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 </head>
 <body>
+  <!-- WebGL Aurora Background -->
   <canvas id="aurora-canvas"></canvas>
 
+  <!-- Sticky Nav -->
+  <nav class="top-nav">
+    <a href="main.html#projects-section" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> Back to Projects
+    </a>
+    <div class="author-tag">Shivanshu Prasad Pandey</div>
+  </nav>
+
+  <div class="case-study-container">
+
+    <!-- Hero Section -->
+    <header class="project-hero">
+      <span class="project-tag">Systems / Backend</span>
+
+      <h1 class="project-title">Resilient Gateway</h1>
+      <h2 class="project-subtitle">Distributed Rate Limiting & Circuit Breaking</h2>
+
+      <p class="project-description">
+        A reusable resilience layer designed to protect backend services from excessive traffic and failing downstream dependencies.
+      </p>
+
+      <div class="tech-pill-list">
+        <span class="tech-pill"><i class="fa-brands fa-js"></i> TypeScript</span>
+        <span class="tech-pill"><i class="fa-brands fa-node-js"></i> Node.js</span>
+        <span class="tech-pill"><i class="fa-solid fa-database"></i> Redis</span>
+        <span class="tech-pill"><i class="fa-solid fa-code"></i> Lua</span>
+        <span class="tech-pill"><i class="fa-brands fa-docker"></i> Docker</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="https://github.com/shivanshu-create" target="_blank" class="btn-github">
+          <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Visual Showcase Area -->
+    <section class="showcase-wrapper">
+      <div class="showcase-placeholder">
+        <i class="fa-solid fa-shield-halved"></i>
+        <h3>Distributed Resilience Middleware</h3>
+        <p>Atomic Redis token-bucket counters, 3-state finite state machine circuit breaker, and concurrency benchmark harness.</p>
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="case-study-section">
+      <div class="section-label">Background & Motivation</div>
+      <h2 class="section-heading">The Problem</h2>
+      
+      <p class="section-paragraph">
+        Backend services commonly fail in two major scenarios:
+      </p>
+      <p class="section-paragraph">
+        <strong>1. Traffic Surges:</strong> Too many requests arrive simultaneously, exhausting thread pools, CPU, or database connection pools.<br>
+        <strong>2. Cascading Dependency Failures:</strong> A downstream service starts failing repeatedly, causing timeouts and backpressure to propagate upstream through the system.
+      </p>
+      <p class="section-paragraph">
+        Without built-in fault tolerance, these failures cascade into widespread system outages. <strong>Resilient Gateway</strong> provides dual layers of protection:
+      </p>
+      <div class="features-grid" style="margin-top: 12px;">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-gauge-high"></i></div>
+          <h3>Rate Limiting</h3>
+          <p>Strictly controls and throttles incoming traffic to match backend capacity limits.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-plug-circle-xmark"></i></div>
+          <h3>Circuit Breaking</h3>
+          <p>Stops repeatedly calling a failing dependency, allowing it time to heal while serving fallback responses.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="case-study-section">
+      <div class="section-label">System Architecture</div>
+      <h2 class="section-heading">How It Works</h2>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Gateway Request Routing Architecture</span>
+        </div>
+        <pre class="diagram-content">
+                         Clients
+                            │
+                            ▼
+                  ┌───────────────────┐
+                  │ Resilient Gateway │
+                  └─────────┬─────────┘
+                            │
+                 ┌──────────┴──────────┐
+                 │                     │
+                 ▼                     ▼
+          Rate Limiter          Circuit Breaker
+                 │                     │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                  Downstream Service</pre>
+      </div>
+
+      <div class="diagram-box" style="margin-top: 20px;">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Distributed Shared State in Redis</span>
+        </div>
+        <pre class="diagram-content">
+             Application Instances
+              │       │       │
+              ▼       ▼       ▼
+            ┌─────────────────────┐
+            │        Redis        │
+            │ Shared Rate State   │
+            └─────────────────────┘</pre>
+      </div>
+    </section>
+
+    <!-- Rate Limiter Deep Dive -->
+    <section class="case-study-section">
+      <div class="section-label">Component Deep Dive</div>
+      <h2 class="section-heading">Rate Limiting: Token Bucket Algorithm</h2>
+
+      <p class="section-paragraph">
+        Each client is associated with a bucket containing a limited number of tokens. A request consumes a token, while tokens are continuously replenished at a configured rate. If no token is available, the request is rejected immediately.
+      </p>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Token Bucket Mechanism</span>
+        </div>
+        <pre class="diagram-content">
+             ┌───────────────┐
+             │ Token Bucket  │
+             │               │
+             │ ● ● ● ●       │
+             │               │
+             │ Capacity: 10  │
+             └───────┬───────┘
+                     │
+             Request consumes 1
+                     │
+                     ▼
+                ● ● ● ●</pre>
+      </div>
+    </section>
+
+    <!-- Why Redis? -->
+    <section class="case-study-section">
+      <div class="section-label">Distributed Design</div>
+      <h2 class="section-heading">Why Redis?</h2>
+
+      <p class="section-paragraph">
+        An in-memory rate limiter works only inside a single process. In a distributed multi-instance deployment:
+      </p>
+      <p class="section-paragraph" style="color: #94a3b8; font-family: monospace;">
+        • Instance A → Tracks its own local counter<br>
+        • Instance B → Tracks a different counter<br>
+        • Instance C → Tracks another counter
+      </p>
+      <p class="section-paragraph">
+        A centralized, low-latency Redis cluster allows all gateway instances to share state and enforce the same global rate limit accurately across the entire cluster.
+      </p>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Global Rate Limit Enforcement</span>
+        </div>
+        <pre class="diagram-content">
+Gateway A ──┐
+Gateway B ──┼──→ Redis (Atomic Shared State)
+Gateway C ──┘</pre>
+      </div>
+    </section>
+
+    <!-- Why Lua Scripts? -->
+    <section class="case-study-section">
+      <div class="section-label">Concurrency Control</div>
+      <h2 class="section-heading">Why Redis Lua Scripts?</h2>
+
+      <p class="section-paragraph">
+        A naive implementation might perform three separate commands: <code>GET</code> → calculate tokens → <code>SET</code>.
+      </p>
+      <p class="section-paragraph">
+        Under high concurrency, multiple processes can read the same token count before either updates it, creating severe race conditions and allowing traffic bursts to breach configured limits.
+      </p>
+      <p class="section-paragraph">
+        <strong>Redis Lua scripts</strong> execute directly on the Redis server as a single atomic transaction. The token check, replenishment calculation, and state mutation happen in one isolated step without requiring distributed locks.
+      </p>
+    </section>
+
+    <!-- Circuit Breaker State Machine -->
+    <section class="case-study-section">
+      <div class="section-label">Fault Tolerance</div>
+      <h2 class="section-heading">Circuit Breaker State Machine</h2>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">3-State Finite State Machine</span>
+        </div>
+        <pre class="diagram-content">
+                    failures exceed threshold
+                ┌────────────────────────────┐
+                │                            ▼
+           ┌─────────┐                  ┌─────────┐
+           │ CLOSED  │ ───────────────→ │  OPEN   │
+           └─────────┘                  └────┬────┘
+                ▲                            │
+                │                            │ timeout
+                │                            ▼
+                │                       ┌───────────┐
+                │ successful test        │ HALF-OPEN │
+                └─────────────────────── │           │
+                                        └─────┬─────┘
+                                              │
+                                           failure
+                                              │
+                                              ▼
+                                            OPEN</pre>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <h3>Closed</h3>
+          <p>Requests flow normally to downstream services. Consecutive failures and latency spikes are continuously monitored.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-ban"></i></div>
+          <h3>Open</h3>
+          <p>Requests are rejected immediately or served fallback responses without making calls to the failing upstream service.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-stethoscope"></i></div>
+          <h3>Half-Open</h3>
+          <p>After a configured recovery timeout, a small trial percentage of traffic is routed to probe whether the service has recovered.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Failure Simulation -->
+    <section class="case-study-section">
+      <div class="section-label">Validation</div>
+      <h2 class="section-heading">Failure Simulation</h2>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Fault Injection Topology</span>
+        </div>
+        <pre class="diagram-content">
+                Gateway
+                   │
+                   ▼
+             Circuit Breaker
+                   │
+                   ▼
+            ┌──────────────┐
+            │ Flaky Service│ (Injected Latency & Errors)
+            └──────────────┘</pre>
+      </div>
+
+      <div class="diagram-box" style="margin-top: 16px;">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">State Transition Lifecycle</span>
+        </div>
+        <pre class="diagram-content">
+NORMAL → FAILURES DETECTED → CIRCUIT OPENS → REQUESTS BLOCKED → RECOVERY PERIOD → HALF-OPEN PROBE → HEALTH CONFIRMED → CLOSED</pre>
+      </div>
+    </section>
+
+    <!-- Concurrency Testing -->
+    <section class="case-study-section">
+      <div class="section-label">Benchmarking</div>
+      <h2 class="section-heading">Concurrency Testing</h2>
+
+      <p class="section-paragraph">
+        The primary goal of the concurrency test is to prove that the distributed rate limiter strictly enforces the configured global limit even when high-volume concurrent traffic floods multiple application gateway instances simultaneously.
+      </p>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Concurrent Load Generator</span>
+        </div>
+        <pre class="diagram-content">
+Multiple clients
+       │
+       ├──── Concurrent Request 1
+       ├──── Concurrent Request 2
+       ├──── Concurrent Request 3
+       ├──── Concurrent Request 4
+       ├──── Concurrent Request 5
+       │
+       ▼
+Resilient Gateway (Multiple Instances)
+       │
+       ▼
+Redis (Atomic Counter Check)</pre>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="case-study-section">
+      <div class="section-label">Architecture Goals</div>
+      <h2 class="section-heading">Key Capabilities</h2>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">Dist.</div>
+          <div class="metric-label">Rate Limiting</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">Atomic</div>
+          <div class="metric-label">Redis Operations</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">3-State</div>
+          <div class="metric-label">Circuit Breaker</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">Parallel</div>
+          <div class="metric-label">Concurrency Harness</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Engineering Trade-offs -->
+    <section class="case-study-section">
+      <div class="section-label">System Analysis</div>
+      <h2 class="section-heading">Engineering Trade-offs</h2>
+
+      <div class="tradeoff-grid">
+        <div class="tradeoff-card">
+          <h4>Token Bucket vs Sliding Window</h4>
+          <ul class="tradeoff-list">
+            <li class="pro"><i class="fa-solid fa-plus"></i> <strong>Token Bucket:</strong> Highly efficient O(1) time complexity</li>
+            <li class="pro"><i class="fa-solid fa-plus"></i> <strong>Token Bucket:</strong> Gracefully accommodates controlled bursts</li>
+            <li class="pro"><i class="fa-solid fa-plus"></i> <strong>Token Bucket:</strong> Minimal memory state representation</li>
+            <li class="con"><i class="fa-solid fa-minus"></i> <strong>Sliding Window:</strong> More precise traffic smoothing at the cost of higher state complexity</li>
+          </ul>
+        </div>
+
+        <div class="tradeoff-card">
+          <h4>In-Memory vs Redis</h4>
+          <ul class="tradeoff-list">
+            <li class="pro"><i class="fa-solid fa-plus"></i> <strong>In-Memory:</strong> Zero network overhead, extremely fast execution</li>
+            <li class="con"><i class="fa-solid fa-minus"></i> <strong>In-Memory:</strong> Fails to synchronize state across horizontal instances</li>
+            <li class="pro"><i class="fa-solid fa-plus"></i> <strong>Redis:</strong> Shared global state across distributed replicas</li>
+            <li class="pro"><i class="fa-solid fa-plus"></i> <strong>Redis:</strong> Atomic Lua scripts prevent concurrency race conditions</li>
+            <li class="con"><i class="fa-solid fa-minus"></i> <strong>Redis:</strong> Adds a minor network hop dependency</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- What I Learned -->
+    <section class="case-study-section">
+      <div class="section-label">Takeaways</div>
+      <h2 class="section-heading">What I Learned</h2>
+
+      <ul class="learnings-list">
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Rate-limiting algorithms (Token Bucket & Sliding Window)</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Distributed state synchronization with Redis</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Redis Lua scripting for atomicity and race condition elimination</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Circuit breaker finite state machine design & threshold tuning</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Fault tolerance & cascading failure mitigation strategies</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Dockerized multi-container microservice environments</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Benchmarking distributed high-concurrency workloads</li>
+      </ul>
+    </section>
+
+    <!-- Future Improvements -->
+    <section class="case-study-section">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-heading">Future Improvements</h2>
+
+      <div class="future-grid">
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Prometheus metrics export</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Real-time Grafana monitoring dashboard</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Dynamic rate-limit policy reloads</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Exponential backoff & retry strategies</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Express / Fastify middleware wrapper</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> npm package publishing</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Three.js + Aurora Background Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="aurora.js"></script>
 </body>

@@ -1,10 +1,16 @@
-// WebGL Aurora Background using Three.js
+// High-Performance WebGL Aurora Background using Three.js
 function initAuroraBackground() {
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    const renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        powerPreference: "high-performance",
+        alpha: false
+    });
+    
+    // Set 1x pixel ratio for high FPS and zero scroll jank
+    renderer.setPixelRatio(1);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     const canvas = document.getElementById('aurora-canvas');
     if (canvas && canvas.parentNode) {
@@ -21,6 +27,8 @@ function initAuroraBackground() {
     renderer.domElement.style.height = '100vh';
     renderer.domElement.style.zIndex = '-10';
     renderer.domElement.style.pointerEvents = 'none';
+    renderer.domElement.style.transform = 'translate3d(0, 0, 0)';
+    renderer.domElement.style.willChange = 'transform';
 
     const material = new THREE.ShaderMaterial({
         uniforms: {
@@ -33,6 +41,7 @@ function initAuroraBackground() {
             }
         `,
         fragmentShader: `
+            precision highp float;
             uniform float iTime;
             uniform vec2 iResolution;
 
@@ -45,18 +54,18 @@ function initAuroraBackground() {
             float noise(vec2 p){
                 vec2 ip = floor(p);
                 vec2 u = fract(p);
-                u = u*u*(3.0-2.0*u);
+                u = u * u * (3.0 - 2.0 * u);
                 
                 float res = mix(
-                    mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
-                    mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
-                return res*res;
+                    mix(rand(ip), rand(ip + vec2(1.0, 0.0)), u.x),
+                    mix(rand(ip + vec2(0.0, 1.0)), rand(ip + vec2(1.0, 1.0)), u.x), u.y);
+                return res * res;
             }
 
             float fbm(vec2 x) {
                 float v = 0.0;
                 float a = 0.3;
-                vec2 shift = vec2(100);    
+                vec2 shift = vec2(100.0);    
                 mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
                 for (int i = 0; i < NUM_OCTAVES; ++i) {
                     v += a * noise(x);
@@ -68,18 +77,18 @@ function initAuroraBackground() {
 
             void main() {
                 vec2 shake = vec2(sin(iTime * 1.2) * 0.005, cos(iTime * 2.1) * 0.005);
-                
                 vec2 p = ((gl_FragCoord.xy + shake * iResolution.xy) - iResolution.xy * 0.5) / iResolution.y * mat2(6.0, -4.0, 4.0, 6.0);
                 vec2 v;
                 vec4 o = vec4(0.0);
                 
                 float f = 2.0 + fbm(p + vec2(iTime * 5.0, 0.0)) * 0.5; 
                 
-                for(float i = 0.0; i++ < 35.0;)
+                // Optimized 22 loop iterations for fluid 60/120fps performance
+                for(float i = 0.0; i++ < 22.0;)
                 {
                     v = p + cos(i * i + (iTime + p.x * 0.08) * 0.025 + i * vec2(13.0, 11.0)) * 3.5 + vec2(sin(iTime * 3.0 + i) * 0.003, cos(iTime * 3.5 - i) * 0.003);
                     
-                    float tailNoise = fbm(v + vec2(iTime * 0.5, i)) * 0.3 * (1.0 - (i / 35.0)); 
+                    float tailNoise = fbm(v + vec2(iTime * 0.5, i)) * 0.3 * (1.0 - (i / 22.0)); 
                     
                     vec4 auroraColors = vec4(
                         0.1 + 0.3 * sin(i * 0.2 + iTime * 0.4),
@@ -90,7 +99,7 @@ function initAuroraBackground() {
                     
                     vec4 currentContribution = auroraColors * exp(sin(i * i + iTime * 0.8)) / length(max(v, vec2(v.x * f * 0.015, v.y * 1.5)));
                     
-                    float thinnessFactor = smoothstep(0.0, 1.0, i / 35.0) * 0.6; 
+                    float thinnessFactor = smoothstep(0.0, 1.0, i / 22.0) * 0.6; 
                     o += currentContribution * (1.0 + tailNoise * 0.8) * thinnessFactor;
                 }
                 
@@ -104,18 +113,24 @@ function initAuroraBackground() {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    function animate() {
+    let lastTime = performance.now();
+    function animate(currentTime) {
         requestAnimationFrame(animate);
-        material.uniforms.iTime.value += 0.016;
+        const delta = Math.min((currentTime - lastTime) / 1000, 0.1);
+        lastTime = currentTime;
+        material.uniforms.iTime.value += delta;
         renderer.render(scene, camera);
     }
+    requestAnimationFrame(animate);
 
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
+        }, 100);
     });
-
-    animate();
 }
 
 window.addEventListener('DOMContentLoaded', initAuroraBackground);

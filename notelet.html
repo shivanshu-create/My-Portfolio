@@ -3,37 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notelet</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
-    
-    body {
-      position: relative;
-    }
-    
-    canvas {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -10;
-    }
-  </style>
+  <title>NoteLet — Case Study | Shivanshu Prasad Pandey</title>
+  <link rel="stylesheet" href="project-style.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 </head>
 <body>
+  <!-- WebGL Aurora Background -->
   <canvas id="aurora-canvas"></canvas>
 
+  <!-- Sticky Nav -->
+  <nav class="top-nav">
+    <a href="main.html#projects-section" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> Back to Projects
+    </a>
+    <div class="author-tag">Shivanshu Prasad Pandey</div>
+  </nav>
+
+  <div class="case-study-container">
+
+    <!-- Hero Section -->
+    <header class="project-hero">
+      <span class="project-tag">Native Linux Application</span>
+
+      <h1 class="project-title">NoteLet</h1>
+      <h2 class="project-subtitle">Native Linux Productivity Suite</h2>
+
+      <p class="project-description">
+        A lightweight Notepad-style application for Linux, built around automatic session restoration, multi-tab editing, and persistent local storage.
+      </p>
+
+      <div class="tech-pill-list">
+        <span class="tech-pill"><i class="fa-brands fa-python"></i> Python</span>
+        <span class="tech-pill"><i class="fa-brands fa-linux"></i> GTK4</span>
+        <span class="tech-pill"><i class="fa-solid fa-layer-group"></i> Libadwaita</span>
+        <span class="tech-pill"><i class="fa-solid fa-database"></i> JSON Persistence</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="https://github.com/shivanshu-create/Notelet-" target="_blank" class="btn-github">
+          <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Visual Showcase Area: Demo GIF -->
+    <section class="showcase-wrapper">
+      <img src="assets/Notelet_demo.gif" alt="NoteLet Application Demo GIF" class="showcase-media">
+    </section>
+
+    <!-- The Problem -->
+    <section class="case-study-section">
+      <div class="section-label">Background</div>
+      <h2 class="section-heading">The Problem</h2>
+      
+      <p class="section-paragraph">
+        While using Linux, I wanted a simple, lightweight Notepad-style application that could preserve my working session between launches.
+      </p>
+      <p class="section-paragraph">
+        Instead of adapting my workflow around the limitation, I decided to build the tool I wanted myself.
+      </p>
+      <p class="section-paragraph">
+        The goal was to create a native Linux application that could open quickly, support multiple notes, and restore the previous session automatically.
+      </p>
+    </section>
+
+    <!-- What I Built -->
+    <section class="case-study-section">
+      <div class="section-label">Core Capabilities</div>
+      <h2 class="section-heading">What I Built</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+          <h3>Automatic Session Restoration</h3>
+          <p>The application persists the user's open notes and restores the previous working session when NoteLet is launched again.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-folder-tree"></i></div>
+          <h3>Multi-Tab Editing</h3>
+          <p>Implemented multi-tab note editing so multiple notes can be managed seamlessly within a single application window.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-hard-drive"></i></div>
+          <h3>Persistent Local Storage</h3>
+          <p>Notes and application preferences are stored locally using a structured JSON-based persistence system.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-window-maximize"></i></div>
+          <h3>Native Linux Interface</h3>
+          <p>Built the application using GTK4 and Libadwaita to provide an authentic, modern Linux desktop experience.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture / How It Works -->
+    <section class="case-study-section">
+      <div class="section-label">System Design</div>
+      <h2 class="section-heading">Architecture & How It Works</h2>
+
+      <div class="diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">System Architecture</span>
+        </div>
+        <pre class="diagram-content">
+                    NoteLet
+                       │
+              ┌────────┴────────┐
+              │                 │
+           UI Layer       Application Logic
+              │                 │
+              └────────┬────────┘
+                       │
+                 Persistence
+                       │
+                     JSON</pre>
+      </div>
+
+      <div class="diagram-box" style="margin-top: 16px;">
+        <div class="diagram-header">
+          <div class="diagram-dots">
+            <span class="diagram-dot red"></span>
+            <span class="diagram-dot yellow"></span>
+            <span class="diagram-dot green"></span>
+          </div>
+          <span class="diagram-title">Execution Pipeline</span>
+        </div>
+        <pre class="diagram-content">
+GTK4 + Libadwaita
+        ↓
+Application State
+        ↓
+Session Manager
+        ↓
+JSON Persistence</pre>
+      </div>
+    </section>
+
+    <!-- Engineering Challenges -->
+    <section class="case-study-section">
+      <div class="section-label">Deep Dive</div>
+      <h2 class="section-heading">Engineering Challenges</h2>
+
+      <div class="challenges-stack">
+        <!-- Challenge 1 -->
+        <div class="challenge-row">
+          <div class="challenge-column">
+            <span class="column-tag problem">Challenge · Session Persistence</span>
+            <h4>Preserving Transient State</h4>
+            <p>The application needed to remember the user's open notes and restore them accurately after the application closed.</p>
+          </div>
+          <div class="challenge-column">
+            <span class="column-tag solution">Solution</span>
+            <h4>Separated State Serialization</h4>
+            <p>I separated persistent session state from the UI state, allowing the application to serialize the required information and cleanly reconstruct the session during startup.</p>
+          </div>
+        </div>
+
+        <!-- Challenge 2 -->
+        <div class="challenge-row">
+          <div class="challenge-column">
+            <span class="column-tag problem">Challenge · Application State</span>
+            <h4>Multi-Tab State Isolation</h4>
+            <p>Multiple tabs require independent note state while still being safely managed by a single unified application controller.</p>
+          </div>
+          <div class="challenge-column">
+            <span class="column-tag solution">Solution</span>
+            <h4>Modular State Management</h4>
+            <p>Designed the application around modular state management so individual notes and the overall session lifecycle could be handled independently.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="case-study-section">
+      <div class="section-label">Impact</div>
+      <h2 class="section-heading">Results</h2>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">4K+</div>
+          <div class="metric-label">Lines of Code</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">Multi-tab</div>
+          <div class="metric-label">Editing Support</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">Auto</div>
+          <div class="metric-label">Session Restoration</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">30%</div>
+          <div class="metric-label">Startup Improvement</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What I Learned -->
+    <section class="case-study-section">
+      <div class="section-label">Takeaways</div>
+      <h2 class="section-heading">What I Learned</h2>
+
+      <ul class="learnings-list">
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Building native Linux desktop applications</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> GTK4 and Libadwaita application development</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Managing application and session state</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Designing persistent local storage</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Structuring a modular desktop application</li>
+        <li class="learning-item"><i class="fa-solid fa-circle-check"></i> Debugging application lifecycle and UI behavior</li>
+      </ul>
+    </section>
+
+    <!-- Future Improvements -->
+    <section class="case-study-section">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-heading">Future Improvements</h2>
+
+      <div class="future-grid">
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> SQLite-based persistence</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Full-text note search</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Markdown support</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Improved crash recovery</div>
+        <div class="future-item"><i class="fa-solid fa-arrow-right"></i> Import/export functionality</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Three.js + Aurora Background Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="aurora.js"></script>
 </body>
